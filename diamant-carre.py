@@ -2,7 +2,7 @@
 from random import randint
 from PIL import Image
 
-def diamant_carre(n):
+def func_diamant_carre(n):
     '''n est un entier naturel, il défini la taille du tableau grace a la formule suivante : (2^n)+1'''
 
     #calcul de la taille du tableau (hauteur)
@@ -61,12 +61,12 @@ def diamant_carre(n):
                 t[x][y] = somme/n + randint(-d, d)
         #mise à jour du pas
         i = d
-
     #renvoie le tableau
     return t
 
-def tableau_to_img(t):
-    '''converti le tableau t en valeurs entre 0 et 255'''
+def func_tableau_to_img(t):
+    '''converti chaque valeurs du tableau t en valeurs en nuance de gris (0-255)
+    Sortie : une image (objet modifiable avec PIL)'''
     h = len(t)
     carte_hauteur = Image.new('L', (h,h), color=0)
     #parcourt chaque case de t
@@ -75,11 +75,22 @@ def tableau_to_img(t):
             #carte de hauteur
             carte_hauteur.putpixel((x,y),int(((t[x][y]*127.5)/h)+127.5))
 
+    return carte_hauteur
 
+def func_carte_hauteur(n=3):
+    '''créer une carte de hauteur sous la forme d'une image png en fonction de n
+    Pour n = 1 : l'image est de 3x3 pixels
+    Pour n = 2 : 5x5 pixels (0.2s)
+    Pour n = 3 : 9x9 pixels (0.2s)
+    Pour n = 7 : 129x129 pixels (0.2s)
+    Pour n = 10 : 1025x1025 pixels (3.2s)
+    Pour n = 12 : 4097x4097 pixels (51.5s)
+    entre (), le temps de génération avec 8Go de RAM, i5-7400CPU 3.00GHz'''
+    carte_hauteur = func_tableau_to_img(func_diamant_carre(n))
     carte_hauteur.save('carte_hauteur.png')
+    d = (2**n)+1
+    print('--carte_hauteur.png saved--')
+    print('dimension: ',d,'x',d)
 
 
-
-n = 5
-tableau_diamant_carre =  diamant_carre(n)
-tableau_to_img(tableau_diamant_carre)
+#func_carte_hauteur(n=10)
