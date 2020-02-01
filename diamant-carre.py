@@ -2,6 +2,8 @@
 from random import randint
 from PIL import Image
 
+facteur=150
+
 def func_diamant_carre(n):
     '''n est un entier naturel, il défini la taille du tableau grace a la formule suivante : (2^n)+1'''
 
@@ -33,7 +35,7 @@ def func_diamant_carre(n):
         for x in range(d,h,i):
             for y in range(d,h,i):
                 moyenne = (t[x-d][y-d] + t[x-d][y+d] + t[x+d][y+d] + t[x+d][y-d])/4
-                t[x][y] = moyenne + randint(-d, d)
+                t[x][y] = moyenne + randint(-facteur, facteur)
 
         decalage = 0
 
@@ -58,7 +60,7 @@ def func_diamant_carre(n):
                 if y + d < h:
                     somme += t[x][y+d]
                     n +=1
-                t[x][y] = somme/n + randint(-d, d)
+                t[x][y] = somme/n + randint(-facteur, facteur)
         #mise à jour du pas
         i = d
     #renvoie le tableau
@@ -93,4 +95,4 @@ def func_carte_hauteur(n=3):
     print('dimension: ',d,'x',d)
 
 
-#func_carte_hauteur(n=10)
+func_carte_hauteur(n=9)
