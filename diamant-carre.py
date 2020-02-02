@@ -67,7 +67,7 @@ def func_diamant_carre(n,f):
     #renvoie le tableau
     return t
 
-def func_tableau_to_img(t):
+def func_convert_to_pixels_values(t):
     '''converti chaque valeurs du tableau t en valeurs en nuance de gris (0-255)
     Sortie : une image (objet modifiable avec PIL)'''
     h = len(t)
@@ -86,7 +86,7 @@ def func_carte_hauteur(n=7,facteur=1):
     Pour n = 10 : 1025x1025 pixels (3.2s)
     Pour n = 12 : 4097x4097 pixels (51.5s)
     entre (), le temps de génération avec 8Go de RAM, i5-7400CPU 3.00GHz'''
-    carte_hauteur = func_tableau_to_img(func_diamant_carre(n,facteur))
+    carte_hauteur = func_convert_to_pixels_values(func_diamant_carre(n,facteur))
     carte_hauteur.save('carte_hauteur.png')
     d = (2**n)+1
     print('--carte_hauteur.png saved--')
