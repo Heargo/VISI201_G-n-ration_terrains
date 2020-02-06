@@ -2,8 +2,11 @@
 from random import randint
 from PIL import Image
 
-def func_diamant_carre(n):
-    '''n est un entier naturel, il défini la taille du tableau grace a la formule suivante : (2^n)+1'''
+
+def func_diamant_carre(n,f):
+    '''n est un entier naturel, il défini la taille du tableau grace a la formule suivante : (2^n)+1
+    f est le facteur de "dénivelé" plus il est bas, plus le paysage ressembleras à une plaine, plus il est
+    élevé, plus les paysages seront abruptes'''
 
     #calcul de la taille du tableau (hauteur)
     h = (2**n)+1
@@ -33,7 +36,7 @@ def func_diamant_carre(n):
         for x in range(d,h,i):
             for y in range(d,h,i):
                 moyenne = (t[x-d][y-d] + t[x-d][y+d] + t[x+d][y+d] + t[x+d][y-d])/4
-                t[x][y] = moyenne + randint(-d, d)
+                t[x][y] = moyenne + randint(int(-d*f),int(d*f))
 
         decalage = 0
 
@@ -58,13 +61,13 @@ def func_diamant_carre(n):
                 if y + d < h:
                     somme += t[x][y+d]
                     n +=1
-                t[x][y] = somme/n + randint(-d, d)
+                t[x][y] = somme/n + randint(int(-d*f),int(d*f))
         #mise à jour du pas
         i = d
     #renvoie le tableau
     return t
 
-def func_tableau_to_img(t):
+def func_convert_to_pixels_values(t):
     '''converti chaque valeurs du tableau t en valeurs en nuance de gris (0-255)
     Sortie : une image (objet modifiable avec PIL)'''
     h = len(t)
@@ -77,20 +80,17 @@ def func_tableau_to_img(t):
 
     return carte_hauteur
 
-def func_carte_hauteur(n=3):
-    '''créer une carte de hauteur sous la forme d'une image png en fonction de n
-    Pour n = 1 : l'image est de 3x3 pixels
-    Pour n = 2 : 5x5 pixels (0.2s)
-    Pour n = 3 : 9x9 pixels (0.2s)
-    Pour n = 7 : 129x129 pixels (0.2s)
+def func_carte_hauteur(n=7,facteur=1):
+    '''créer une carte de hauteur sous la forme d'une image png en fonction de n et du facteur de "dénivelé"
+    Pour n = 7 (valeur par defaut): 129x129 pixels (0.2s)
     Pour n = 10 : 1025x1025 pixels (3.2s)
     Pour n = 12 : 4097x4097 pixels (51.5s)
     entre (), le temps de génération avec 8Go de RAM, i5-7400CPU 3.00GHz'''
-    carte_hauteur = func_tableau_to_img(func_diamant_carre(n))
+    carte_hauteur = func_convert_to_pixels_values(func_diamant_carre(n,facteur))
     carte_hauteur.save('carte_hauteur.png')
     d = (2**n)+1
     print('--carte_hauteur.png saved--')
     print('dimension: ',d,'x',d)
 
 
-#func_carte_hauteur(n=10)
+func_carte_hauteur()
