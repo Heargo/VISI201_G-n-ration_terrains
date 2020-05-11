@@ -38,9 +38,11 @@ def func_carte_hauteur(n=7,facteur=1):
     carte_hauteur = func_convert_to_pixels_values(n,facteur)
     carte_hauteur.save('carte_hauteur.png')
     #message utilisateur
+    '''
     d = (2**n)+1
     print('--carte_hauteur.png saved--')
     print('dimension: ',d,'x',d)
+    '''
     return carte_hauteur
 
 def func_color(px,hauteur_ocean=0,algo='dc'):
@@ -279,7 +281,13 @@ def func_color_devinele(pixels,hauteur_ocean=0,algo='dc'):
 	#print(color)
 	return color
 
+
+
+
+#[les fonctions qui suivent ont des bugs à fixer]
+
 def trace_river(carte_river,carte_hauteur,size,depart,hauteur_ocean,ancienne_position):
+	'''Cette fonction trace un rivière jusqu'a la mer'''
 	#print('En cours')
 	px_hauteur = carte_hauteur
 	img = carte_river
@@ -317,10 +325,10 @@ def trace_river(carte_river,carte_hauteur,size,depart,hauteur_ocean,ancienne_pos
 
 
 def func_add_river(data,size,higth_map,proba_apparition,hauteur_ocean,hauteur_depart_river):
+	'''parcourt la carte de hauteur et pose démarre une rivière avec une certaine probilité''' 
 	nb_riviere=0
 	px_hauteur = higth_map
 	w, h = size[0], size[1]
-	#carte_river=data
 	#on parcourt chaque pixel de la carte de hauteur
 	for x in range(w):
 		for y in range(h):

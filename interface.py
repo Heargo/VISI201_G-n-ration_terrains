@@ -10,30 +10,31 @@ from PIL import Image
 import noise
 import numpy as np
 import tkinter as tk
+from tkinter import ttk
 from map_2D import func_map_color, func_map_color_perlin
 
 
-
+#variables "tampon" pour stocker les données généré via l'apperçu afin de les utiliser pour générer la carte 3D
 data_map_perlin=[]
 data_map_dc=[]
-info='Veuillez générer une carte 2D'
 
 
 
 def tk_2d_map_dc():
+	'''Cette procédure est appelée lorsque l'utilisateur clique sur le bouton d'apperçu 2D avec une génération via diamant-carré.'''
 	global data_map_dc
 	#recupere les parametres
 	n= scale_n.get()
 	f=scale_f.get()
-	#genere la carte
-	print('Uptade data')
-	data_map_dc= func_map_color(n,f)
-	print('Uptade data------------done')
-	#actualise le canvas
+	couleur = liste_color.get()
+	#genere la carte et la stocke dans la variable tampon 
+	data_map_dc= func_map_color(n,f,couleur_option=couleur)
+	#actualise le canvas 
 	map_img_canvas=tk.PhotoImage(file='./carte_couleur.png')
 	canvas_map.after(500,canvas_map.create_image(0,0,image=map_img_canvas, anchor=tk.NW))
 
 def tk_2d_map_perlin():
+	'''Cette procédure est appelée lorsque l'utilisateur clique sur le bouton d'apperçu 2D avec une génération via le bruit de perlin.'''
 	global data_map_perlin
 	#recupere les parametres
 	shape= (int(spin_x.get()),int(spin_y.get())) 	
@@ -44,19 +45,22 @@ def tk_2d_map_perlin():
 	seed=int(spin_seed.get())
 	facteur_denivele=scale_f_perlin.get()
 	hauteur_ocean=scale_hauteur_ocean.get()
+	couleur = liste_color.get()
 	#genere la carte
-	data_map_perlin =func_map_color_perlin(shape=shape,scale=scale,octaves=octaves,persistence=persistence,lacunarity=lacunarity,seed=seed,facteur_denivele=facteur_denivele,hauteur_ocean=hauteur_ocean)
+	data_map_perlin =func_map_color_perlin(shape=shape,scale=scale,octaves=octaves,persistence=persistence,lacunarity=lacunarity,seed=seed,facteur_denivele=facteur_denivele,hauteur_ocean=hauteur_ocean,couleur_option=couleur)
 	#actualise le canvas
 	map_img_canvas=tk.PhotoImage(file='./carte_couleur.png')
 	canvas_map.after(500,canvas_map.create_image(0,0,image=map_img_canvas, anchor=tk.NW))
 
 
 def tk_3d_map_dc():
-	#genere la carte
+	'''Cette procédure est appelée lorsque l'utilisateur clique sur générer un fichier OBJ via diamant-carré.'''
+	#récupère les données stockées dans les variables tampon
 	px = data_map_dc.load()
 	X, Y = data_map_dc.size
-	print('On commencer à creer la map 3D')
+	#Creer le fichier obj
 	with open("map.obj", "w") as carte:
+		#v (coordonnées de points)
 		for x in range(X):
 			for y in range(Y):
 				x, y = float(x), float(y)
@@ -66,14 +70,14 @@ def tk_3d_map_dc():
 				else:
 					carte.write("v "+str(x)+" "+str(float(z)-115)+" "+str(y)+"\n")	
 		
-		#vt
+		#vt (coordonnées de texture)
 		for x in range(X):
 			for y in range(Y,0,-1):
-				i, j = x/X, y/Y	#test valeur entre 0 et 1
-				carte.write("vt "+str(i)+" "+str(j)+' 0'+"\n")
+				i, j = x/X, y/Y	
+				carte.write("vt "+str(i)+" "+str(j)+"\n")
 		
 
-		#f
+		#f (faces)
 		for x in range(X-1):
 			for y in range(Y-1):
 				num=(y*Y+x)+1
@@ -82,28 +86,28 @@ def tk_3d_map_dc():
 
 
 def tk_3d_map_perlin():
-	#genere la carte
+	'''Cette procédure est appelée lorsque l'utilisateur clique sur générer un fichier OBJ via le bruit de perlin.'''
+	#récupère les données stockées dans les variables tampon
 	hauteur_ocean=scale_hauteur_ocean.get()
 	px= data_map_perlin[0]
 	X,Y = data_map_perlin[1][0], data_map_perlin[1][1]
+	#Creer le fichier obj
 	with open("map.obj", "w") as carte:
+		#v (coordonnées de points)
 		for x in range(X):
 			for y in range(Y):
 				z=px[x][y]
-				#print('z:',z,'hauteur_ocean:',hauteur_ocean)
 				if z <=hauteur_ocean:
-					#print('sous ocean')
 					carte.write("v "+str(x)+" "+str(hauteur_ocean*500)+" "+str(y)+"\n")
 				else:
-					#print('pas sous ocean')
 					carte.write("v "+str(x)+" "+str((float(px[x][y])-hauteur_ocean)*500)+" "+str(y)+"\n")
-		#vt
+		#vt (coordonnées de texture)
 		for x in range(X):
 			for y in range(Y,0,-1):
-				i, j = x/X, y/Y	#test valeur entre 0 et 1
+				i, j = x/X, y/Y	
 				carte.write("vt "+str(i)+" "+str(j)+"\n")
 
-		#f
+		#f (faces)
 		for x in range(X-1):
 			for y in range(Y-1):
 				num=(y*Y+x)+1
@@ -122,7 +126,14 @@ label_appercu = tk.Label(root,text='Aperçu de la carte')
 canvas_map = tk.Canvas(root)
 
 #info user
-label_info = tk.Label(root,text=info)
+label_info = tk.Label(root,text="Veuillez générer un apperçu 2D avant de générer le fichier obj")
+
+#choix de la couleur
+label_color_option = tk.Label(root, text = "Veuillez choisir le méthode de coloration :")
+listeoption = ["Cartoon","Réaliste"]
+liste_color = ttk.Combobox(root, values=listeoption)
+liste_color.current(1)
+
 
 
 
@@ -173,14 +184,14 @@ bouton_map_perlin_2d=tk.Button(root,text='Apperçu 2D',command=tk_2d_map_perlin)
 bouton_map_perlin_3d=tk.Button(root,text='Génerer fichier OBJ',command=tk_3d_map_perlin)
 
 
-#grid
-
+#Emplacement des éléments tkinter (grid)
 
 #partie gauche
 label_appercu.grid(row=0,column=0)
 canvas_map.grid(row=1, column=0,rowspan=9)
 label_info.grid(row=11,column=0)
-
+label_color_option.grid(row=12,column=0)
+liste_color.grid(row=13,column=0)
 
 #partie droite
 

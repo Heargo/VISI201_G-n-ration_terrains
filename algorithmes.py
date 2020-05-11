@@ -5,23 +5,9 @@
 #█▀▄▀█ █▀█ █▀▄ █ █ █   █▀▀ █▀
 #█ ▀ █ █▄█ █▄▀ █▄█ █▄▄ ██▄ ▄█
 #----------------------------
-from random import randint, uniform, seed
+from random import randint, uniform
 import noise
 
-
-#-----------------------------------------
-#
-#
-#░█████╗░██╗░░░░░░██████╗░░█████╗░░██████╗
-#██╔══██╗██║░░░░░██╔════╝░██╔══██╗██╔════╝
-#███████║██║░░░░░██║░░██╗░██║░░██║╚█████╗░
-#██╔══██║██║░░░░░██║░░╚██╗██║░░██║░╚═══██╗
-#██║░░██║███████╗╚██████╔╝╚█████╔╝██████╔╝
-#╚═╝░░╚═╝╚══════╝░╚═════╝░░╚════╝░╚═════╝░
-#
-#----------------------------------------
-
-#seed(a=3)
 
 #---------------------------------------------------
 #█▀▄ █ ▄▀█ █▀▄▀█ ▄▀█ █▄ █ ▀█▀ ▄▄ █▀▀ ▄▀█ █▀█ █▀█ █▀▀
@@ -119,7 +105,7 @@ def func_noise_map(shape,scale,octaves, persistence,lacunarity,seed,facteur):
 	-seed, type int. C'est la seed du tableau. Par défaut elle est à 0. Pour générer quelque-chose d'aléatoire il faut utiliser un random.
 	Sortie : un tuple qui comporte : (tableau,shape,seed)
 	'''
-	#Creation d'un tableau de 0 de coté h
+	#Creation d'un tableau remplit de 0 de coté h
 	t = []
 	tempo=[]
 	for x in range(shape[0]):
