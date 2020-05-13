@@ -50,109 +50,80 @@ def func_color(px,hauteur_ocean=0,algo='dc'):
 	px : entier entre 0-255
 	sortie : tuple (R,V,B)'''
 	if algo=='dc':
-		#océan profond
-		if px <=20:
-			color =(2, 45, 71)
-		elif px <=40:
-			color =(9, 59, 87)
-		elif px <=60:
-			color =(12, 77, 114)
-		#océan
-		elif px <=84:
-			color =(16, 80, 110)
-		elif px <=90:
-			color =(23, 85, 112)
-		elif px <=100:
-			color =(33, 90, 113)
-		#peu de profondeur
-		elif px <=110:
-			color =(43, 95, 115)
-		#plages
-		elif px <=115:
-			color =(224, 205, 169)
-		#plaines
-		elif px <=130:
-			color =(70, 115, 63)
-		elif px <=145:
-			color =(58, 100, 54)
-		elif px <=160:
-			color =(52, 92, 50)
-		elif px <=180:
-			color =(47, 87, 45)
-		#forets
-		elif px <=190:
-			color =(42, 82, 39)
-		elif px <=220:
-			color =(32, 72, 29)
-		#montage
-		elif px <=230:
-			color =(90, 68, 50)
-		elif px <=235:
-			color =(97, 75, 58)
-		elif px <=240:
-			color =(107, 85, 68)
-		#roches
-		elif px <=250:
-			color =(122, 122, 122)
-		elif px <=252:
-			color =(132, 132, 132)
-		#neige
-		elif px <=254:
-			color =(240, 240, 240)
-		else:
-			color =(255, 255, 255)
+		dico_hauteur_color = {
+		#Océan profond
+		(0,20):(2,45,71),
+		(21,40):(9, 59, 87),
+		(41,60):(12, 77, 114),
+		#Océan
+		(61,84):(16, 80, 110),
+		(85,90):(23, 85, 112),
+		(91,100):(33, 90, 113),
+		#Peu de profondeur
+		(101,110):(43, 95, 115),
+		#Plages
+		(111,115):(224, 205, 169),
+		#Plaines
+		(116,130):(70, 115, 63),
+	    (131,145):(58, 100, 54),
+	    (146,160):(52, 92, 50),
+	    (161,180):(47, 87, 45),
+	    #Forets
+	 	(181,190):(42, 82, 39),
+	 	(191,220):(32, 72, 29),
+	 	#Montage
+	    (221,230):(90, 68, 50),
+	    (231,235):(97, 75, 58),
+		(236,240):(107, 85, 68),
+		#Roches
+	    (240,250):(122, 122, 122),
+		(251,252):(132, 132, 132),
+		#Neige
+		(253,254):(240, 240, 240),
+		(255,255):(255, 255, 255)
+		}
+
+		for k in dico_hauteur_color.keys():
+			if k[0]<=px<=k[1]:
+				color =dico_hauteur_color[k]
+
 	else:
-		#océan profond
-		if px <=-0.035+hauteur_ocean:
-			color =(2, 45, 71)
-		elif px <=-0.4+hauteur_ocean:
-			color =(9, 59, 87)
-		elif px <=-0.030+hauteur_ocean:
-			color =(12, 77, 114)
-		#océan
-		elif px <=-0.025+hauteur_ocean:
-			color =(16, 80, 110)
-		elif px <=-0.020+hauteur_ocean:
-			color =(23, 85, 112)
-		elif px <=-0.015+hauteur_ocean:
-			color =(33, 90, 113)
-		#peu de profondeur
-		elif px <=-0.005+hauteur_ocean:
-			color =(43, 95, 115)
-		#plages
-		elif px <=0.0003+hauteur_ocean:
-			color =(224, 205, 169)
-		#plaines
-		elif px <=0.02+hauteur_ocean:
-			color =(70, 115, 63)
-		elif px <=0.025+hauteur_ocean:
-			color =(58, 100, 54)
-		elif px <=0.03+hauteur_ocean:
-			color =(52, 92, 50)
-		elif px <=0.035+hauteur_ocean:
-			color =(47, 87, 45)
-		#forets
-		elif px <=0.05+hauteur_ocean:
-			color =(42, 82, 39)
-		elif px <=0.06+hauteur_ocean:
-			color =(32, 72, 29)
-		#montage
-		elif px <=0.065+hauteur_ocean:
-			color =(90, 68, 50)
-		elif px <=0.070+hauteur_ocean:
-			color =(97, 75, 58)
-		elif px <=0.075+hauteur_ocean:
-			color =(107, 85, 68)
-		#roches
-		elif px <=0.080+hauteur_ocean:
-			color =(122, 122, 122)
-		elif px <=0.085+hauteur_ocean:
-			color =(132, 132, 132)
-		#neige
-		elif px <=.090+hauteur_ocean:
-			color =(240, 240, 240)
-		else:
-			color =(255, 255, 255)
+		dico_hauteur_color = {
+		#Océan profond
+		(-1,-0.035):(2,45,71),
+		(-0.0349,-0.04):(9, 59, 87),
+		(-0.039,-0.030):(12, 77, 114),
+		#Océan
+		(-0.029,-0.025):(16, 80, 110),
+		(-0.024,-0.020):(23, 85, 112),
+		(-0.019,-0.015):(33, 90, 113),
+		#Peu de profondeur
+		(-0.014,-0.005):(43, 95, 115),
+		#Plages
+		(-0.004,0.0003):(224, 205, 169),
+		#Plaines
+		(0.0004,0.02):(70, 115, 63),
+		(0.21,0.025):(58, 100, 54),
+		(0.026,0.03):(52, 92, 50),
+		(0.031,0.035):(47, 87, 45),
+		#Forets
+		(0.036,0.05):(42, 82, 39),
+		(0.051,0.06):(32, 72, 29),
+		#Montage
+		(0.061,0.065):(90, 68, 50),
+		(0.066,0.070):(97, 75, 58),
+		(0.071,0.075):(107, 85, 68),
+		#Roches
+		(0.076,0.080):(122, 122, 122),
+		(0.081,0.085):(132, 132, 132),
+		#Neige
+		(0.086,0.090):(240, 240, 240),
+		(0.091,1):(255, 255, 255)
+		}
+
+		for k in dico_hauteur_color.keys():
+			if k[0]<=px+hauteur_ocean<=k[1]:
+				color =dico_hauteur_color[k]
 
 	return color
 
